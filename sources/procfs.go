@@ -103,6 +103,7 @@ type multistatParsingStruct struct {
 
 func init() {
 	Factories["procfs"] = newLustreSource
+	Factories["syskerndebug"] = newLustreSysKernDebugSource
 }
 
 type lustreProcfsSource struct {
@@ -326,6 +327,31 @@ func (s *lustreProcfsSource) generateGenericMetricTemplates(filter string) {
 func newLustreSource() LustreSource {
 	var l lustreProcfsSource
 	l.basePath = filepath.Join(ProcLocation, "fs/lustre")
+	//control which node metrics you pull via flags
+	if OstEnabled != disabled {
+		l.generateOSTMetricTemplates(OstEnabled)
+	}
+	if MdtEnabled != disabled {
+		l.generateMDTMetricTemplates(MdtEnabled)
+	}
+	if MgsEnabled != disabled {
+		l.generateMGSMetricTemplates(MgsEnabled)
+	}
+	if MdsEnabled != disabled {
+		l.generateMDSMetricTemplates(MdsEnabled)
+	}
+	if ClientEnabled != disabled {
+		l.generateClientMetricTemplates(ClientEnabled)
+	}
+	if GenericEnabled != disabled {
+		l.generateGenericMetricTemplates(GenericEnabled)
+	}
+	return &l
+}
+
+func newLustreSysKernDebugSource() LustreSource {
+	var l lustreProcfsSource
+	l.basePath = filepath.Join(SysLocation, "kernel/debug/lustre")
 	//control which node metrics you pull via flags
 	if OstEnabled != disabled {
 		l.generateOSTMetricTemplates(OstEnabled)
