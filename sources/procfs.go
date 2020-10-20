@@ -282,6 +282,8 @@ func (s *lustreProcfsSource) generateClientMetricTemplates(filter string) {
 			{"rpc_stats", "pages_per_rpc_total", pagesPerRPCHelp, s.counterMetric, false, core},
 			{"rpc_stats", "rpcs_in_flight", rpcsInFlightHelp, s.gaugeMetric, true, core},
 			{"rpc_stats", "rpcs_offset", offsetHelp, s.gaugeMetric, false, core},
+			{"stats", "read_bytes_total", readTotalHelp, s.counterMetric, false, core},
+			{"stats", "write_bytes_total", writeTotalHelp, s.counterMetric, false, core},
 		},
 	}
 	for path := range metricMap {
