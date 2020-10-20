@@ -35,6 +35,7 @@ var (
 
 func init() {
 	Factories["sysfs"] = newLustreSysSource
+	Factories["syskerneldebug"] = newLustreSysKernelDebugSource
 }
 
 type lustreSysSource struct {
@@ -61,6 +62,15 @@ func (s *lustreSysSource) generateHealthStatusTemplates(filter string) {
 func newLustreSysSource() LustreSource {
 	var l lustreSysSource
 	l.basePath = filepath.Join(SysLocation, "fs/lustre")
+	if HealthStatusEnabled != disabled {
+		l.generateHealthStatusTemplates(HealthStatusEnabled)
+	}
+	return &l
+}
+
+func newLustreSysKernelDebugSource() LustreSource {
+	var l lustreSysSource
+	l.basePath = filepath.Join(SysLocation, "kernel/debug/lustre")
 	if HealthStatusEnabled != disabled {
 		l.generateHealthStatusTemplates(HealthStatusEnabled)
 	}
